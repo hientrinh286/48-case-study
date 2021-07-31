@@ -9,11 +9,32 @@
 </head>
 <body>
     <canvas id='my-canvas' width='800px' height="500px"></canvas>
+    <button onclick='turnOff_Music()'>Turn Off</button>
+    <button onclick='turnOn_music()'>Turn On Music</button>
     <audio autoplay loop  id="playAudio">
         <source src="sound/game-sound-background.mp3">
       </audio>
     <script src='js_file/Character.js'></script>
     <script src='js_file/Object.js'></script>
+    <script src='js_file/Blood.js'></script>
     <script src='js_file/main.js'></script>
+    <script>
+        let bgMusic = document.getElementById('playAudio');
+        function turnOff_Music(){
+            if (bgMusic.autoplay && bgMusic.loop){
+                bgMusic.autoplay = false;
+                bgMusic.loop = false;
+                bgMusic.muted = true;
+            }
+        }
+        
+        function turnOn_music(){
+            if (!bgMusic.autoplay && !bgMusic.loop && bgMusic.muted){
+                bgMusic.autoplay = true;
+                bgMusic.loop = true;
+                bgMusic.muted = false;
+            }
+        }
+    </script>
 </body>
 </html>

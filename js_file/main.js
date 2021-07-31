@@ -10,13 +10,11 @@ const background = new Image();
 background.src = 'img/background/background2.png';
 
 const characterImage = new Image();
-characterImage.src = 'img/character/character2.png';
+characterImage.src = 'img/character/character5.png';
 
 const axeImage = new Image();
 axeImage.src = 'img/character/axe.png';
 
-const turtleImage = new Image();
-turtleImage.src ='img/object/turtle.png';
 
 const coinImage = new Image();
 coinImage.src = 'img/object/coin.png';
@@ -33,14 +31,21 @@ birdImage.src = 'img/object/bird.png';
 const beeImage = new Image();
 beeImage.src = 'img/object/bee.png';
 
+const frogImage = new Image();
+frogImage.src = 'img/object/frog.png';
 
-let turtlesObject = [];
+const CharacterAction = ['run', 'jump', 'fall','dizzy', 'attack', 'ko'];
+
+
+
+
 let coinsObject = [];
 let mushroomsObject = [];
 let snailsObject = [];
 let birdsObject = [];
 let beesObject = [];
-let objects = [turtlesObject, coinsObject, mushroomsObject, snailsObject, birdsObject, beesObject];
+let frogsObject = [];
+let objects = [coinsObject, snailsObject, birdsObject, beesObject, mushroomsObject, frogsObject];
 
 
 //Create Character
@@ -50,26 +55,11 @@ function drawCharacter(img, sX, sY, sW, sH, dX, dY, dW, dH) {
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
 }
 
-//Create array turtlesObject
-const numberOfTurtle = 100;
-for (let i = 0; i < numberOfTurtle; i++){
-    let turtle = new Object(turtleImage, (i+2)*400, 360, 480, 387.67);
-    turtle.speedX = Math.floor(Math.random()*(2-1)+1);
-    turtle.speedY = 0;
-    turtle.frameX_Max = 3;
-    turtle.frameX = Math.floor(Math.random()*3);
-    turtle.frameY = Math.floor(Math.random()*2);
-    turtle.scale = 0.1;
-    turtle.moving = true;
-
-    turtlesObject.push(turtle);
-}
-
 
 //Create array coinsObject
 const numberOfBlockCoin = 100;
 for (let i = 0; i < numberOfBlockCoin; i++){
-    let coinsInBlock = Math.floor(Math.random()*(10-1)+1);
+    let coinsInBlock = Math.floor(Math.random()*(10-3)+3);
     for(let j =0; j <coinsInBlock; j++){
         let coin = new Object(coinImage, (i+3)*400+j*10, Math.floor(Math.random()*(260-200)+200), 143.33, 135);
         coin.speedX = 5;
@@ -87,7 +77,7 @@ for (let i = 0; i < numberOfBlockCoin; i++){
 //Create array mushroomsObject
 const numberOfMushroom = 100;
 for (let i = 0; i < numberOfMushroom; i++){
-    let mushroom = new Object(mushroomImage, (i+1)*500, 350, 95, 96);
+    let mushroom = new Object(mushroomImage, (i+1)*Math.floor(Math.random()*(400-100)+100), 350, 95, 96);
     mushroom.speedX = 0;
     mushroom.speedY = 0;
     mushroom.frameX_Max = 3;
@@ -104,7 +94,7 @@ for (let i = 0; i < numberOfMushroom; i++){
 const numberOfSnail = 100;
 for (let i = 0; i < numberOfSnail; i++){
     let snail = new Object(snailImage, (i+3)*200, 370, 480, 228);
-    snail.speedX = Math.random()*0.7+0.3;
+    snail.speedX = Math.random()*5+4;
     snail.speedY = 0;
     snail.frameX_Max = 3;
     snail.frameX = Math.floor(Math.random()*3);
@@ -145,6 +135,23 @@ for (let i = 0; i < numberOfBee; i++){
     beesObject.push(bee);
 }
 
+//Create array frogsObject
+const numberOfFrog = 100;
+for (let i = 0; i < numberOfFrog; i++){
+    let frog = new Object(frogImage, (i+2)*100, 360, 64, 64);
+    frog.speedX = Math.floor(Math.random()*(5-4)+4);
+    frog.speedY = 0;
+    frog.frameX_Max = 3;
+    frog.frameX = 0;
+    frog.frameY = 0;
+    frog.scale = 0.5;
+    frog.moving = true;
+
+    frogsObject.push(frog);
+}
+
+let blood = new Blood(620, 35, 150, 10);
+
 const keys = [];
 
 //Bắt đầu copy
@@ -166,11 +173,32 @@ function MoveRightBackground(speed){
 
 
 window.addEventListener('keydown', function(e){
+    if (character.checkGround){
     keys[e.keyCode] = true;
     character.moving = true;
+    }
+    
+})
+
+
+window.addEventListener('touchstart', function(e){
+    if (character.checkGround){
+    keys[e.keyCode] = true;
+    character.moving = true;
+    }
+    
+})
+
+window.addEventListener('mousedown', function(e){
+    if (character.checkGround){
+    keys[e.keyCode] = true;
+    character.moving = true;
+    }
+    
 })
 
 window.addEventListener('keypress', function(e){
+    //delete keys[e.keyCode];
     delete keys[e.keyCode];
     character.moving = false;
 })
@@ -180,6 +208,15 @@ window.addEventListener('keyup', function(e){
     character.moving = false;
 })
 
+window.addEventListener('mouseup', function(e){
+    delete keys[e.keyCode];
+    character.moving = false;
+})
+
+window.addEventListener('touchend', function(e){
+    delete keys[e.keyCode];
+    character.moving = false;
+})
 //check Border
 function checkBorder(){
     if (character.x > canvas.width - character.width/2 && character.checkRight) {
@@ -192,181 +229,50 @@ function checkBorder(){
 function gravitycharacter(){
     if (character.y < character.jumpPoint && !character.moving){
         if (character.checkRight){
-            character.frameX = 4;
-            character.frameY = 4;
+            character.frameX++;
+            character.frameY = 2;
             character.y +=character.speedY;
-            character.x +=character.speedX;
-        } else {
-            character.frameX = 4;
-            character.frameY = 3;
-            character.y +=character.speedY;
-            character.x -=character.speedX;
         }
     }
-    checkGround();
+    //checkGround();
 }
 
-function checkGround(){
-    if (character.y == character.jumpPoint && !character.moving){
-        countUp = 0;
-        if (character.checkRight){
-            character.frameX = 0;
-            character.frameY = 0;
-        } else {
-            character.frameX = 1;
-            character.frameY = 0;
-        }
-    }
-    if (character.y == character.jumpPoint){
-        character.checkGround = true;
-    }
-}
-
-var countUp = 0;
-function movecharacter(){
-    checkBorder();
-    if (keys[38] && character.checkGround){
-        countUp++;
-        if (countUp<=4){
+{ //function checkGround
+    function checkGround(){
+        if (character.y == character.jumpPoint && !character.moving){
             if (character.checkRight){
                 character.frameX = 0;
-                character.frameY = 4;
-                character.y -= character.speedY*3;
-                //character.x += character.speedX*3;
-                MoveLeftBackground(character.speedX*5);
-                for (let i = 0; i< objects.length; i++){
-                    objects[i].forEach(function(element) {
-                        element.x -=character.speedX*5;
-                    });
-                }
-                } else {
-                character.frameX = 2;
-                character.frameY = 3;
-                character.y -= character.speedY*3;
-                //character.x -= character.speedX*3;
-                MoveRightBackground(character.speedX*5);
-                for (let i = 0; i< objects.length; i++){
-                    objects[i].forEach(function(element) {
-                        element.x +=character.speedX*5;
-                    });
-                }
+                character.frameY = 0;
+            } else {
+                character.frameX = 1;
+                character.frameY = 0;
             }
         }
-        checkScore();
-    } else if (keys[39] && character.x < canvas.width) {
-        character.x +=character.speedX;
-        character.runCharacter();
-        character.frameY = 2;
-        character.checkRight = true;
-        MoveLeftBackground(character.speedX);
-        for (let i = 0; i< objects.length; i++){
-            objects[i].forEach(function(element) {
-                element.x -=character.speedX;
-            });
+        if (character.y == character.jumpPoint){
+            character.checkGround = true;
+            character.moving = true;
+        } else {
+            character.checkGround = false;
         }
-        for (i in objects){
-            for (item in objects[i]) {
-                item.x -= character.speedX;
-            }
+    
+        if (character.y >= character.jumpPoint){
+            character.y = character.jumpPoint ;
         }
-        checkScore()
-    } else if (keys[37] && character.x >=0) {
-        character.x -=character.speedX;
-        character.frameY = 5;
-        character.runCharacter();
-        character.checkRight = false;
-        MoveRightBackground(character.speedX);
-        for (let i = 0; i< objects.length; i++){
-            objects[i].forEach(function(element) {
-                element.x +=character.speedX;
-            });
-        }
-        checkScore()
     }
-    checkGround();
 }
+
+
 // kết thúc copy
-/*
-var countUp = 0;
-window.addEventListener('keydown', function(event){
-    if (event.keyCode ==38 && character.checkGround){
-        countUp++;
-        if (countUp<=4){
-            if (character.checkRight){
-                character.frameX = 0;
-                character.frameY = 4;
-                character.y -= character.speedY*3;
-                //character.x += character.speedX*3;
-                MoveLeftBackground(character.speedX*5);
-                for (let i = 0; i< objects.length; i++){
-                    objects[i].forEach(function(element) {
-                        element.x -=character.speedX*5;
-                    });
-                }
-                } else {
-                character.frameX = 2;
-                character.frameY = 3;
-                character.y -= character.speedY*3;
-                //character.x -= character.speedX*3;
-                MoveRightBackground(character.speedX*5);
-                for (let i = 0; i< objects.length; i++){
-                    objects[i].forEach(function(element) {
-                        element.x +=character.speedX*5;
-                    });
-                }
-            }
-        }
-        checkScore();
-    } else if (event.keyCode ==39 && character.x < canvas.width) {
-        character.x +=character.speedX;
-        character.runCharacter();
-        character.frameY = 2;
-        character.checkRight = true;
-        MoveLeftBackground(character.speedX);
-        for (let i = 0; i< objects.length; i++){
-            objects[i].forEach(function(element) {
-                element.x -=character.speedX;
-            });
-        }
-        for (i in objects){
-            for (item in objects[i]) {
-                item.x -= character.speedX;
-            }
-        }
-        checkScore()
-    } else if (event.keyCode ==37 && character.x >=0) {
-        character.x -=character.speedX;
-        character.frameY = 5;
-        character.runCharacter();
-        character.checkRight = false;
-        MoveRightBackground(character.speedX);
-        for (let i = 0; i< objects.length; i++){
-            objects[i].forEach(function(element) {
-                element.x +=character.speedX;
-            });
-        }
-        checkScore();
-    }
-    checkGround();
-}
-)*/
-function checkScore(){
-    for (let i = 0; i<coinsObject.length; i++){
-        if ((coinsObject[i].x <= character.x+ character.width * character.scale && character.x <= coinsObject[i].x + coinsObject[i].width* coinsObject[i].scale) && (character.y < coinsObject[i].y + coinsObject[i].height * coinsObject[i].scale && character.y + character.height * character.scale > coinsObject[i].y)) {
-            score++;
-            coinsObject[i].status = false;
-            getCoinSound();
-        }
-    }
-}
 
 let fps, fpsInterval, startTime, now, then, elapsed;
 
-function startAnimate(fps){
+{ // function start Animate
+    function startAnimate(fps){
     fpsInterval = 1000/fps;
     then = Date.now();
     startTime = then;
     animate(); 
+}
 }
 
 function animate(){
@@ -383,22 +289,71 @@ function animate(){
     ctx.font = "30px Arial";
     ctx.fillText('SCORE:', 10, 50);
     ctx.fillText(score, 130, 50);
-    character.drawCharacter();
-    movecharacter();
-    //drawCharacter(characterImage, character.width * character.frameX, character.height * character.frameY, character.width,
-        //character.height, character.x/2, canvas.height/2, character.width, character.height);
+    ctx.fillText('BLOOD:', 500, 50);
+    
 
-    for (let i = 0; i< turtlesObject.length; i++){
-        turtlesObject[i].drawObject();
-        turtlesObject[i].updateMove();
-        turtlesObject[i].getMove();
+
+    blood.drawBlood();
+
+    character.drawCharacter();
+    character.runCharacter();
+    //movecharacter();
+
+    if (keys[38] && character.y >=200) {
+        character.runCharacter();
+        character.frameY = 0;
+        character.y -= 30;
     }
 
-    for (let i = 0; i< coinsObject.length; i++){
-        if ((coinsObject[i].x <= character.x+ character.width*character.scale && character.x <= coinsObject[i].x + coinsObject[i].width* coinsObject[i].scale) && (character.y < coinsObject[i].y + coinsObject[i].height * coinsObject[i].scale && character.y + character.height * character.scale > coinsObject[i].y)) {
-            score++;
-            coinsObject[i].status = false;
+    canvas.addEventListener('mousedown', function(e){
+        if (character.y >=200) {
+            character.runCharacter();
+            character.frameY = 1;
+            character.frameX++;
+            if (character.frameX > 9) {
+                character.frameX = 0;
+            }
+            character.y -= 30;
+            for (let i = 0; i< objects.ngth; i++){
+                objects[i].forEach(function(element) {
+                    //element.x -=character.speedX;
+                });
+            }
         }
+        
+    })
+
+    canvas.addEventListener('touchstart', function(e){
+        if (character.y >=200) {
+            character.runCharacter();
+            character.frameY = 1;
+            character.frameX++;
+            if (character.frameX > 9) {
+                character.frameX = 0;
+            }
+            character.y -= 30;
+            for (let i = 0; i< objects.ngth; i++){
+                objects[i].forEach(function(element) {
+                    //element.x -=character.speedX;
+                });
+            }
+        }
+        
+    })
+    const fixPointCollosion = -20;
+    for (let i = 0; i< coinsObject.length; i++){
+        if (coinsObject[i].status){
+            if (coinsObject[i].x+fixPointCollosion >= character.x - coinsObject[i].width * coinsObject[i].scale
+                && coinsObject[i].x - fixPointCollosion <= character.x + character.width * character.scale
+                && coinsObject[i].y - fixPointCollosion >= character.y - coinsObject[i].height * coinsObject[i].scale
+                && coinsObject[i].y - fixPointCollosion <= character.y + character.height * character.scale) {
+                coinsObject[i].status = false;
+                getCoinSound();
+                score++;
+                
+            }
+        }
+        
 
         if (coinsObject[i].status) {
             coinsObject[i].drawObject();
@@ -409,14 +364,27 @@ function animate(){
 
     for (let i = 0; i< mushroomsObject.length; i++){
         mushroomsObject[i].drawObject();
-        //mushroomsObject[i].updateMove();
-        mushroomsObject[i].getMove();
     }
 
+
     for (let i = 0; i< snailsObject.length; i++){
-        snailsObject[i].drawObject();
-        snailsObject[i].updateMove();
-        snailsObject[i].getMove();
+        if (snailsObject[i].status){
+            if (snailsObject[i].x+fixPointCollosion >= character.x - snailsObject[i].width * snailsObject[i].scale*2
+                && snailsObject[i].x -fixPointCollosion <= character.x + character.width * character.scale
+                && snailsObject[i].y -fixPointCollosion >= character.y - snailsObject[i].height * snailsObject[i].scale*2
+                && snailsObject[i].y+fixPointCollosion <= character.y + character.height * character.scale) {
+                    snailsObject[i].status = false;
+                    snailsObject[i].frameY = 2;
+                    snailsObject[i].frameX =3;
+                blood.lostBlood(10);
+                
+            }
+        }
+        if (snailsObject[i].status) {
+            snailsObject[i].drawObject();
+            snailsObject[i].updateMove();
+            snailsObject[i].getMove();
+        }
     }
 
     for (let i = 0; i< birdsObject.length; i++){
@@ -430,6 +398,26 @@ function animate(){
         beesObject[i].updateMove();
         beesObject[i].getMove();
     }
+
+    for (let i = 0; i< frogsObject.length; i++){
+        if (frogsObject[i].status){
+            if (frogsObject[i].x+fixPointCollosion >= character.x - frogsObject[i].width * frogsObject[i].scale*2
+                && frogsObject[i].x -fixPointCollosion <= character.x + character.width * character.scale
+                && frogsObject[i].y -fixPointCollosion >= character.y - frogsObject[i].height * frogsObject[i].scale*2
+                && frogsObject[i].y+fixPointCollosion <= character.y + character.height * character.scale) {
+                    frogsObject[i].status = false;
+                    frogsObject[i].frameY = 2;
+                    frogsObject[i].frameX =3;
+                blood.lostBlood(3);
+                
+            }
+        }
+
+        frogsObject[i].drawObject();
+        frogsObject[i].updateMove();
+        frogsObject[i].getMove();
+    }
+    MoveLeftBackground(character.speedX);
     gravitycharacter();
 
     }

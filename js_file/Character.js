@@ -2,10 +2,10 @@ class Character {
     constructor(img){
         this.canvas = document.getElementById('my-canvas');
         this.ctx = this.canvas.getContext('2d');
-        this.width = 144;
-        this.height = 144;
+        this.width = 299;
+        this.height = 300;
         this.img = img;
-        this.jumpPoint = this.canvas.height - this.height*1.15;
+        this.jumpPoint = this.canvas.height - this.height*0.55;
         this.frameX = 0;
         this.frameY = 0;
         this.speedX = 5;
@@ -13,11 +13,11 @@ class Character {
         this.moving = false;
         this.checkRight = true;
         this.checkGround = true;
-        this.x = 0;
+        this.x = 50;
         this.y = this.jumpPoint;
         this.moving = true;
-        this.scale = 0.4;
-        this.frameX_Max = 1;
+        this.scale = 0.2;
+        this.frameX_Max = 12;
         this.frameY_Max = 1;
 
     }
