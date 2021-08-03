@@ -1,4 +1,7 @@
-const canvas = document.getElementById('my-canvas');
+function myGame(){
+    document.getElementById('my-canvas').hidden = false;
+    document.getElementById('table-instruction').hidden = true;
+    const canvas = document.getElementById('my-canvas');
 const ctx = canvas.getContext('2d');
 
 let score = 0;
@@ -438,7 +441,7 @@ if (gameStatus){
                     if (fullManaStatus){
                         score++;
                     } else {
-                        blood.lostBlood(40);
+                        blood.lostBlood(30);
                     }  
             }
             birdsObject[i].drawObject();
@@ -462,7 +465,7 @@ if (gameStatus){
                     if (fullManaStatus){
                         score++;
                     } else {
-                        blood.lostBlood(50);
+                        blood.lostBlood(40);
                     }  
             }
             beesObject[i].drawObject();
@@ -544,4 +547,5 @@ function CheckGameOver(){
         document.getElementById('playAudio').muted = true;
         window.location.reload();
     }
+}
 }
