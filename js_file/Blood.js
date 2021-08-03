@@ -1,5 +1,5 @@
 class Blood {
-    constructor(x, y, w, h){
+    constructor(x, y, w, h, color){
         this.canvas = document.getElementById('my-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.x = x;
@@ -7,22 +7,26 @@ class Blood {
         this.w = w;
         this.h = h;
         this.blood = 100;
-        this.color = 'red';
+        this.color = color;
     }
 
     drawBlood(){
         this.ctx.beginPath();
         this.ctx.strokeStyle = 'black';
+        this.ctx.fillStyle = this.color;
         this.ctx.strokeRect(this.x-1, this.y-1, 152, this.h+2)
         this.ctx.fillRect(this.x, this.y, this.w, this.h);
-        this.ctx.fillStyle = 'red';
+        this.ctx.fill();
         this.ctx.stroke();
     }
 
     lostBlood(speed){
         this.w -=speed;
-        if (this.w <=0){
-            this.w = 0;
+    }
+
+    checkMana(){
+        if (this.w >150){
+            this.w = 150;
         }
     }
 }
