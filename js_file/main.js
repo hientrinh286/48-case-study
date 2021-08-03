@@ -347,7 +347,7 @@ if (gameStatus){
             }
         }  
     })
-    const fixPointCollosion = -20;
+    const fixPointCollosion = 0;
     for (let i = 0; i< coinsObject.length; i++){
         if (count % 100 == 0){
             coinsObject[i].speedX +=0.5;
@@ -510,6 +510,7 @@ if (gameStatus){
     gravitycharacter();
     CheckGameOver();
     count++;
+    console.log(blood.w);
     if (count % 100 == 0){
         character.speedX +0.5;
     }
