@@ -388,10 +388,9 @@ if (gameStatus){
                 && mushroomsObject[i].y - fixPointCollosion >= character.y - mushroomsObject[i].height * mushroomsObject[i].scale
                 && mushroomsObject[i].y - fixPointCollosion <= character.y + character.height * character.scale) {
                 mushroomsObject[i].status = false;
+                blood.w++;
                 if (fullManaStatus){
                     score++;
-                } else {
-                    blood.lostBlood(2);
                 }
                 
             }
