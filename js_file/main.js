@@ -543,5 +543,6 @@ function CheckGameOver(){
         document.getElementById('playAudio').autoplay = false;
         document.getElementById('playAudio').loop = false;
         document.getElementById('playAudio').muted = true;
+        window.location.reload();
     }
 }
