@@ -25,7 +25,7 @@ class Blood {
     }
 
     checkMana(){
-        if (this.w >150){
+        if (this.w >=150){
             this.w = 150;
         }
     }

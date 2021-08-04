@@ -14,6 +14,9 @@
                 <button onclick='turnOff_Music()'>Turn Off Music</button>
             </td>
             <td>
+                <h3 id='highscore'></h3>
+            </td>
+            <td>
                 <button onclick='turnOn_music()'>Turn On Music</button>
             </td>
         </tr>
@@ -21,7 +24,7 @@
     <table id='table-instruction'>
         <tr>
             <td>
-                <h2> Hướng dẫn chơi game</h2>
+                <h2> Hướng dẫn chơi game Jungle Fight</h2>
                 <p>
                     <p>- Dùng phím &uarr; hay click chuột trái hoặc bấm vào màn hình để điều khiển nhân vật nhảy lên.</p>
                     <p>- Tránh các vật thể như ong, chim, ốc sên, ếch.</p>
@@ -29,41 +32,25 @@
                     <p>- Ăn Xu để được tăng điểm số.</p>
                     <p>- Nấm là thức ăn, ăn nấm được tăng thêm máu.</p>
                     <p>- Nấm xanh được tăng thêm mana.</p>
-                    <p>- Full mana, nhân vật có thể ăn toàn bộ các vật thể và được cộng điểm.</p>
+                    <p>- Full mana, nhân vật lớn lên, có thể ăn toàn bộ các vật thể và được cộng điểm.</p>
                     <p>- Số điểm trừ cho mỗi nhân vật: Ong(40), chim(30), ốc sên(2), ếch(5).</p>
+                </p>
                 </p>
                 <button onclick='myGame()'>Play</button>
             </td>
         </tr>
+        <tr>
+            <td><p><a href="https://github.com/hientrinh286/48-case-study">Link GitHub</a>
+            <p><a href="https://www.facebook.com/trinh.v.hien.5/"> <i>Create by: Hiên Trình</i></a></p></td>
+        </tr>
     </table>
 
     <canvas id='my-canvas' width='800px' height="500px" hidden></canvas>
-    
-    
-    <audio autoplay loop id="playAudio">
-        <source src="sound/game-sound-background2.mp3">
-      </audio>
+   
     <script src='js_file/Character.js'></script>
     <script src='js_file/Object.js'></script>
     <script src='js_file/Blood.js'></script>
     <script src='js_file/main.js'></script>
-    <script>
-        let bgMusic = document.getElementById('playAudio');
-        function turnOff_Music(){
-            if (bgMusic.autoplay && bgMusic.loop){
-                bgMusic.autoplay = false;
-                bgMusic.loop = false;
-                bgMusic.muted = true;
-            }
-        }
-        
-        function turnOn_music(){
-            if (!bgMusic.autoplay && !bgMusic.loop && bgMusic.muted){
-                bgMusic.autoplay = true;
-                bgMusic.loop = true;
-                bgMusic.muted = false;
-            }
-        }
-    </script>
+   
 </body>
 </html>

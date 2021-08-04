@@ -32,4 +32,23 @@ class Object {
             this.frameX = 0;
         }
     }
+
+    objectCollision(){
+        if (this.status){
+            if (beesObject[i].x >= character.x - this.width * this.scale
+                && this.x <= character.x + character.width * character.scale
+                && this.y - character.fixPointCollision >= character.y - this.height * this.scale
+                && this.y + character.fixPointCollision <= character.y + character.height * character.scale) {
+                    this.status = false;
+                    if (fullManaStatus){
+                        score++;
+                    } else {
+                        blood.lostBlood(40);
+                    }  
+            }
+            this.drawObject();
+            this.updateMove();
+            this.getMove();
+        }
+    }
 }
