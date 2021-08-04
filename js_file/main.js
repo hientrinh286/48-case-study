@@ -396,8 +396,6 @@ function myGame(){
                     && snailsObject[i].y - fixPointCollosion >= character.y - snailsObject[i].height * snailsObject[i].scale
                     && snailsObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
                         snailsObject[i].status = false;
-                        snailsObject[i].frameY = 2;
-                        snailsObject[i].frameX =3;
                         if (fullManaStatus){
                             score++;
                         } else {
@@ -420,8 +418,6 @@ function myGame(){
                     && birdsObject[i].y -fixPointCollosion >= character.y - birdsObject[i].height * birdsObject[i].scale
                     && birdsObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
                         birdsObject[i].status = false;
-                        birdsObject[i].frameY = 2;
-                        birdsObject[i].frameX =3;
                         if (fullManaStatus){
                             score++;
                         } else {
@@ -444,11 +440,6 @@ function myGame(){
                     && beesObject[i].y - fixPointCollosion >= character.y - beesObject[i].height * beesObject[i].scale
                     && beesObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
                         beesObject[i].status = false;
-                        console.log(beesObject[i].x)
-                        console.log(character.x - beesObject[i].width * beesObject[i].scale)
-                        console.log(beesObject[i].y - fixPointCollosion)
-                        console.log(character.y - beesObject[i].height * beesObject[i].scale)
-                        console.log(beesObject[i].y)
                         if (fullManaStatus){
                             score++;
                         } else {
