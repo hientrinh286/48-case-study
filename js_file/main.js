@@ -1,4 +1,25 @@
 function myGame(){
+    var bgrMusic = new Audio('sound/game-sound-background2.mp3');
+    function bgrSound(){
+        bgrMusic.autoplay = false;
+        bgrMusic.loop = false;
+        bgrMusic.muted = true;
+        bgrMusic.load();
+        bgrMusic.play();
+    }
+    bgrSound();
+
+    function turnOff_Music(){
+        bgrMusic.autoplay = false;
+        bgrMusic.loop = false;
+        bgrMusic.muted = true;
+    }
+        
+    function turnOn_music(){
+        bgrMusic.autoplay = true;
+        bgrMusic.loop = true;
+        bgrMusic.muted = false;
+    }
     const canvas = document.getElementById('my-canvas');
     const ctx = canvas.getContext('2d');
     canvas.hidden = false;
@@ -417,25 +438,3 @@ function myGame(){
         }
     }
 }
-
-var bgrMusic = new Audio('sound/game-sound-background2.mp3');
-    function bgrSound(){
-        bgrMusic.autoplay = false;
-        bgrMusic.loop = false;
-        bgrMusic.muted = true;
-        bgrMusic.load();
-        bgrMusic.play();
-    }
-    bgrSound();
-
-    function turnOff_Music(){
-        bgrMusic.autoplay = false;
-        bgrMusic.loop = false;
-        bgrMusic.muted = true;
-    }
-        
-    function turnOn_music(){
-        bgrMusic.autoplay = true;
-        bgrMusic.loop = true;
-        bgrMusic.muted = false;
-    }
