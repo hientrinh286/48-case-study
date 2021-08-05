@@ -423,9 +423,9 @@ function myGame(){
 
 var bgrMusic = new Audio('sound/game-sound-background2.mp3');
     function bgrSound(){
-        bgrMusic.autoplay = true;
-        bgrMusic.loop = true;
-        bgrMusic.muted = false;
+        bgrMusic.autoplay = false;
+        bgrMusic.loop = false;
+        bgrMusic.muted = true;
         bgrMusic.load();
         bgrMusic.play();
     }
