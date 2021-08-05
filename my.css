@@ -1,18 +1,18 @@
 #table-btn {
-    width: 70%;
-    height: 16%;
+    width: 80%;
+    height: 10%;
     bottom: unset;
     text-align: center;
     position: absolute;
     top: 0;
-    left: 15%;
+    left: 10%;
     background-color: #2492a5;
     table-layout: fixed;
 }
 
 #table-instruction{
-    width: 70%;
-    height: 70%;
+    width: 80%;
+    height: 80%;
     bottom: unset;
     text-align: center;
     position: absolute;
@@ -22,8 +22,8 @@
     background-image: url('img/background/background2.png');
 }
 #my-canvas {
-    width :70%;
-    height: 70%;
+    width :80%;
+    height: 80%;
     border: 1px solid black;
     background-color: chocolate;
     position: absolute;
