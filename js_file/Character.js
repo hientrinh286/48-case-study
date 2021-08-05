@@ -11,7 +11,6 @@ class Character {
         this.speedX = 5;
         this.speedY = 30;
         this.moving = false;
-        this.checkRight = true;
         this.checkGround = true;
         this.x = 50;
         this.y = this.jumpPoint;

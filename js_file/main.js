@@ -6,17 +6,12 @@ function myGame(){
 
     let score = 0;
     let count = 0;
-    var highScore = 0;
     // Input Image
     const background = new Image();
     background.src = 'img/background/background2.png';
 
     const characterImage = new Image();
     characterImage.src = 'img/character/character6.png';
-
-    const axeImage = new Image();
-    axeImage.src = 'img/character/axe.png';
-
 
     const coinImage = new Image();
     coinImage.src = 'img/object/coin.png';
@@ -35,8 +30,6 @@ function myGame(){
 
     const frogImage = new Image();
     frogImage.src = 'img/object/frog.png';
-
-    const CharacterAction = ['run', 'jump', 'fall','dizzy', 'attack', 'ko'];
 
     let coinsObject = [];
     let mushroomsObject = [];
@@ -65,7 +58,6 @@ function myGame(){
             coinsObject.push(coin);
         }   
     }
-
     //Create array mushroomsObject
     const numberOfMushroom = 1000;
     for (let i = 0; i < numberOfMushroom; i++){
@@ -91,7 +83,6 @@ function myGame(){
         snail.frameY = Math.floor(Math.random()*2);
         snail.scale = 0.1;
         snail.moving = true;
-
         snailsObject.push(snail);
     }
 
@@ -106,7 +97,6 @@ function myGame(){
         bird.frameY = 0;
         bird.scale = 0.5;
         bird.moving = true;
-
         birdsObject.push(bird);
     }
 
@@ -121,7 +111,6 @@ function myGame(){
         bee.frameY = 0;
         bee.scale = 0.1;
         bee.moving = true;
-
         beesObject.push(bee);
     }
 
@@ -136,7 +125,6 @@ function myGame(){
         frog.frameY = 0;
         frog.scale = 0.5;
         frog.moving = true;
-
         frogsObject.push(frog);
     }
 
@@ -198,11 +186,9 @@ function myGame(){
 
     function gravitycharacter(){
         if (character.y < character.jumpPoint && !character.moving){
-            {
                 character.frameX++;
                 character.frameY = 2;
                 character.y +=character.speedY;
-            }
         }
 
         else{
@@ -212,31 +198,17 @@ function myGame(){
                 character.frameX = 0;
             }
             checkGround();
-            
         }
     }
 
     { //function checkGround
         function checkGround(){
-            if (character.y == character.jumpPoint && !character.moving){
-                if (character.checkRight){
-                    character.frameX = 0;
-                    character.frameY = 0;
-                } else {
-                    character.frameX = 1;
-                    character.frameY = 0;
-                }
-            }
             if (character.y == character.jumpPoint){
                 character.checkGround = true;
                 character.moving = true;
-            } else {
-                character.checkGround = false;
-            }
+            } else {character.checkGround = false;}
         
-            if (character.y >= character.jumpPoint){
-                character.y = character.jumpPoint ;
-            }
+            if (character.y >= character.jumpPoint){character.y = character.jumpPoint;}
         }
     }
 
@@ -280,6 +252,7 @@ function myGame(){
         ctx.drawImage(background, positionBackground, 0, canvas.width, canvas.height);
         ctx.drawImage(background, positionBackground-canvas.width, 0, canvas.width, canvas.height);
         ctx.drawImage(background, positionBackground+canvas.width, 0, canvas.width, canvas.height);
+        if (mana.w >= 150) { mana.w = 150}
         if (mana.w ==150){
             fullManaStatus = true;
             countMana ++;
@@ -292,16 +265,12 @@ function myGame(){
             }
         }
 
-        if (mana.w < 150){
-            fullManaStatus = false;
-        }
+        if (mana.w < 150){fullManaStatus = false;}
 
         if (fullManaStatus){
             character.scale = 1.5;
             character.y = 0;
-        } else {
-            character.scale = 0.2;
-        }
+        } else {character.scale = 0.2;}
         blood.drawBlood();
         mana.drawBlood();
         ctx.font = "30px Arial";
@@ -315,27 +284,19 @@ function myGame(){
         character.drawCharacter();
         character.runCharacter();
 
-        if (keys[38] && character.y >=100) {
-            characterJump();
-        }
+        if (keys[38] && character.y >=100) {characterJump();}
 
         canvas.addEventListener('mousedown', function(e){
-            if (character.y >=100) {
-                characterJump()
-            }       
+            if (character.y >=100) {characterJump();}       
         })
         
 
         canvas.addEventListener('touchstart', function(e){
-            if (character.y >=100) {
-                characterJump()
-            }  
+            if (character.y >=100) {characterJump();}  
         })
         const fixPointCollosion = 5;
         for (let i = 0; i< coinsObject.length; i++){
-            if (count % 100 == 0){
-                coinsObject[i].speedX +=0.5;
-            }
+            coinsObject[i].raiseSpeed(count);
             if (coinsObject[i].status){
                 if (coinsObject[i].x >= character.x - coinsObject[i].width * coinsObject[i].scale
                     && coinsObject[i].x <= character.x + character.width * character.scale
@@ -354,9 +315,7 @@ function myGame(){
         }
 
         for (let i = 0; i< mushroomsObject.length; i++){
-            if (count % 100 == 0){
-                mushroomsObject[i].speedX +=0.5;
-            }
+            mushroomsObject[i].raiseSpeed(count);
             if (mushroomsObject[i].status){
                 if (mushroomsObject[i].x >= character.x - mushroomsObject[i].width * mushroomsObject[i].scale
                     && mushroomsObject[i].x <= character.x + character.width * character.scale
@@ -369,6 +328,9 @@ function myGame(){
                     }
                     if (blood.w <=90){
                         blood.w +=10;
+                        if (blood.w >=100){
+                            blood.w = 100;
+                        }
                     }  
                 } else if (mushroomsObject[i].x >= character.x - mushroomsObject[i].width * mushroomsObject[i].scale
                     && mushroomsObject[i].x <= character.x + character.width * character.scale
@@ -378,8 +340,7 @@ function myGame(){
                     blood.w++;
                     if (fullManaStatus){
                         score++;
-                    }
-                    
+                    } 
                 }
                 mushroomsObject[i].drawObject();
                 mushroomsObject[i].getMove();
@@ -387,101 +348,37 @@ function myGame(){
         }
 
         for (let i = 0; i< snailsObject.length; i++){
-            if (count % 100 == 0){
-                snailsObject[i].speedX +=0.5;
-            }
-            if (snailsObject[i].status){
-                if (snailsObject[i].x >= character.x - snailsObject[i].width * snailsObject[i].scale
-                    && snailsObject[i].x <= character.x + character.width * character.scale
-                    && snailsObject[i].y - fixPointCollosion >= character.y - snailsObject[i].height * snailsObject[i].scale
-                    && snailsObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
-                        snailsObject[i].status = false;
-                        if (fullManaStatus){
-                            score++;
-                        } else {
-                            blood.lostBlood(2);
-                        }  
-                }
-                snailsObject[i].drawObject();
-                snailsObject[i].updateMove();
-                snailsObject[i].getMove();
-            }
+            snailsObject[i].raiseSpeed(count);
+            snailsObject[i].objectCollision(character, blood, 2, fullManaStatus, score);
         }
 
         for (let i = 0; i< birdsObject.length; i++){
-            if (count % 100 == 0){
-                birdsObject[i].speedX +0.5;
-            }
-            if (birdsObject[i].status){
-                if (birdsObject[i].x >= character.x - birdsObject[i].width * birdsObject[i].scale
-                    && birdsObject[i].x <= character.x + character.width * character.scale
-                    && birdsObject[i].y -fixPointCollosion >= character.y - birdsObject[i].height * birdsObject[i].scale
-                    && birdsObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
-                        birdsObject[i].status = false;
-                        if (fullManaStatus){
-                            score++;
-                        } else {
-                            blood.lostBlood(30);
-                        }  
-                }
-                birdsObject[i].drawObject();
-                birdsObject[i].updateMove();
-                birdsObject[i].getMove();
-            }
+            birdsObject[i].raiseSpeed(count);
+            birdsObject[i].objectCollision(character, blood, 30, fullManaStatus, score);
         }
 
         for (let i = 0; i< beesObject.length; i++){
-            if (count % 100 == 0){
-                beesObject[i].speedX +0.5;
-            }
-            if (beesObject[i].status){
-                if (beesObject[i].x >= character.x - beesObject[i].width * beesObject[i].scale
-                    && beesObject[i].x <= character.x + character.width * character.scale
-                    && beesObject[i].y - fixPointCollosion >= character.y - beesObject[i].height * beesObject[i].scale
-                    && beesObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
-                        beesObject[i].status = false;
-                        if (fullManaStatus){
-                            score++;
-                        } else {
-                            blood.lostBlood(40);
-                        }  
-                }
-                beesObject[i].drawObject();
-                beesObject[i].updateMove();
-                beesObject[i].getMove();
-            }
+            beesObject[i].raiseSpeed(count);
+            beesObject[i].objectCollision(character, blood, 40, fullManaStatus, score); 
         }
 
         for (let i = 0; i< frogsObject.length; i++){
+            frogsObject[i].raiseSpeed(count);
             if (frogsObject[i].status){
                 if (frogsObject[i].x> character.x - frogsObject[i].width * frogsObject[i].scale
                     && frogsObject[i].x < character.x + character.width * character.scale
                     && frogsObject[i].y -fixPointCollosion >= character.y - frogsObject[i].height * frogsObject[i].scale
                     && frogsObject[i].y+fixPointCollosion <= character.y + character.height * character.scale
-                    && character.jumpPoint - character.speedY == character.y) { //tính toán lại đoạn này cho các đối tượng khác
+                    && character.jumpPoint - character.speedY == character.y) {
                         blood.lostBlood(0);
                         if (fullManaStatus){
                             score++;
                         }
-                        mana.w +=30;
+                        mana.w +=15;
                         frogsObject[i].status = false;
-                } else if (frogsObject[i].x >= character.x - frogsObject[i].width * frogsObject[i].scale*2
-                    && frogsObject[i].x <= character.x + character.width * character.scale
-                    && frogsObject[i].y - fixPointCollosion >= character.y - frogsObject[i].height * frogsObject[i].scale*2
-                    && frogsObject[i].y + fixPointCollosion < character.y + character.height * character.scale) {
-                        frogsObject[i].status = false;
-                        if (fullManaStatus){
-                            score++;
-                        } else {
-                            blood.lostBlood(5);
-                        }   
+                } else {
+                    frogsObject[i].objectCollision(character, blood, 5, fullManaStatus, score);
                 }
-                if (count % 100 == 0){
-                    frogsObject[i].speedX +0.5;
-                }
-                frogsObject[i].drawObject();
-                frogsObject[i].updateMove();
-                frogsObject[i].getMove();
             }
         }
         
@@ -489,7 +386,7 @@ function myGame(){
         gravitycharacter();
         count++;
         if (count % 100 == 0){
-            character.speedX +0.5;
+            character.speedX +=0.5;
         }
         if (blood.w < 30){
             character.frameY = 3;
@@ -500,10 +397,8 @@ function myGame(){
         }
         }
         CheckGameOver();
+    } 
     }
-        
-    }
-
     startAnimate(15);
 
     function getCoinSound(){

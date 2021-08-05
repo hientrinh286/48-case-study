@@ -33,9 +33,9 @@ class Object {
         }
     }
 
-    objectCollision(){
+    objectCollision(character, blood, bloodLost, fullManaStatus, score){
         if (this.status){
-            if (beesObject[i].x >= character.x - this.width * this.scale
+            if (this.x >= character.x - this.width * this.scale
                 && this.x <= character.x + character.width * character.scale
                 && this.y - character.fixPointCollision >= character.y - this.height * this.scale
                 && this.y + character.fixPointCollision <= character.y + character.height * character.scale) {
@@ -43,12 +43,18 @@ class Object {
                     if (fullManaStatus){
                         score++;
                     } else {
-                        blood.lostBlood(40);
+                        blood.lostBlood(bloodLost);
                     }  
             }
             this.drawObject();
             this.updateMove();
             this.getMove();
+        }
+    }
+
+    raiseSpeed(count){
+        if (count % 100 == 0){
+           this.speedX +=0.5;
         }
     }
 }
