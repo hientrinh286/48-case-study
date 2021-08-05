@@ -4,7 +4,7 @@ function myGame(){
     canvas.hidden = false;
     document.getElementById('table-instruction').hidden = true;
 
-    let score = 0;
+    //let score = 0;
     let count = 0;
     // Input Image
     const background = new Image();
@@ -37,7 +37,6 @@ function myGame(){
     let birdsObject = [];
     let beesObject = [];
     let frogsObject = [];
-    let objects = [coinsObject, snailsObject, birdsObject, beesObject, mushroomsObject, frogsObject];
 
     //Create Character
     let character = new Character(characterImage, 0, 330, 166.67, 166.67);
@@ -90,7 +89,7 @@ function myGame(){
     const numberOfBird = 50;
     for (let i = 0; i < numberOfBird; i++){
         let bird = new Object(birdImage, i*3000, Math.floor(Math.random()*(270-100)+100), 72, 72);
-        bird.speedX = Math.floor(Math.random()*(30-20)+20);
+        bird.speedX = Math.floor(Math.random()*(20-10)+10);
         bird.speedY = 0;
         bird.frameX_Max = 7;
         bird.frameX = Math.floor(Math.random()*7);
@@ -104,7 +103,7 @@ function myGame(){
     const numberOfBee = 1000;
     for (let i = 0; i < numberOfBee; i++){
         let bee = new Object(beeImage, i*Math.floor(Math.random()*(500-400)+400), Math.floor(Math.random()*(270-70)+70), 273, 282);
-        bee.speedX = Math.floor(Math.random()*(30-10)+10);
+        bee.speedX = Math.floor(Math.random()*(20-10)+10);
         bee.speedY = 0;
         bee.frameX_Max = 7;
         bee.frameX = Math.floor(Math.random()*12);
@@ -190,14 +189,11 @@ function myGame(){
                 character.frameY = 2;
                 character.y +=character.speedY;
         }
-
         else{
             character.frameY = 0;
             character.frameX++;
-            if (character.frameX >12){
-                character.frameX = 0;
-            }
-            checkGround();
+            if (character.frameX >12){character.frameX = 0;
+            } checkGround();
         }
     }
 
@@ -227,7 +223,6 @@ function myGame(){
     }
 
     let fps, fpsInterval, startTime, now, then, elapsed;
-
     { // function start Animate
         function startAnimate(fps){
         fpsInterval = 1000/fps;
@@ -238,8 +233,6 @@ function myGame(){
     }
 
     var countMana = 0;
-    var fullManaStatus = false;
-
     function animate(){
     if (gameStatus){
         requestAnimationFrame(animate);
@@ -254,7 +247,7 @@ function myGame(){
         ctx.drawImage(background, positionBackground+canvas.width, 0, canvas.width, canvas.height);
         if (mana.w >= 150) { mana.w = 150}
         if (mana.w ==150){
-            fullManaStatus = true;
+            mana.full = true;
             countMana ++;
             character.frameY = 5;
             character.frameX++;
@@ -264,10 +257,8 @@ function myGame(){
                 mana.w = 0;
             }
         }
-
-        if (mana.w < 150){fullManaStatus = false;}
-
-        if (fullManaStatus){
+        if (mana.w < 150){mana.full = false;}
+        if (mana.full){
             character.scale = 1.5;
             character.y = 0;
         } else {character.scale = 0.2;}
@@ -276,7 +267,7 @@ function myGame(){
         ctx.font = "30px Arial";
         ctx.fillStyle = 'red';
         ctx.fillText('SCORE:', 10, 50);
-        ctx.fillText(score, 130, 50);
+        ctx.fillText(character.score, 130, 50);
         ctx.font = "15px Arial";
         ctx.fillText('BLOOD:', 550, 40);
         ctx.fillText('MANA:', 559, 60);
@@ -304,8 +295,8 @@ function myGame(){
                     && coinsObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
                     coinsObject[i].status = false;
                     getCoinSound();
-                    score++;
-                    mana.w +=1;
+                    character.score++;
+                    mana.w +=2;
                     mana.checkMana();
                 }
                 coinsObject[i].drawObject();
@@ -313,7 +304,7 @@ function myGame(){
                 coinsObject[i].getMove();
             }
         }
-
+        coinsObject =  coinsObject.filter(object => !object.deleteStatus)
         for (let i = 0; i< mushroomsObject.length; i++){
             mushroomsObject[i].raiseSpeed(count);
             if (mushroomsObject[i].status){
@@ -323,8 +314,8 @@ function myGame(){
                     && mushroomsObject[i].y + fixPointCollosion <= character.y + character.height * character.scale
                     && (mushroomsObject[i].frameX == 0 && mushroomsObject[i].frameY == 1) ) {
                     mushroomsObject[i].status = false;
-                    if (fullManaStatus){
-                        score++;
+                    if (mana.full){
+                        character.score++;
                     }
                     if (blood.w <=90){
                         blood.w +=10;
@@ -338,30 +329,30 @@ function myGame(){
                     && mushroomsObject[i].y + fixPointCollosion <= character.y + character.height * character.scale) {
                     mushroomsObject[i].status = false;
                     blood.w++;
-                    if (fullManaStatus){
-                        score++;
+                    if (mana.full){
+                        character.score++;
                     } 
                 }
                 mushroomsObject[i].drawObject();
                 mushroomsObject[i].getMove();
             }
         }
-
+        mushroomsObject =  mushroomsObject.filter(object => !object.deleteStatus)
         for (let i = 0; i< snailsObject.length; i++){
             snailsObject[i].raiseSpeed(count);
-            snailsObject[i].objectCollision(character, blood, 2, fullManaStatus, score);
+            snailsObject[i].objectCollision(character, blood, 2, mana);
         }
-
+        snailsObject = snailsObject.filter(object => !object.deleteStatus)
         for (let i = 0; i< birdsObject.length; i++){
             birdsObject[i].raiseSpeed(count);
-            birdsObject[i].objectCollision(character, blood, 30, fullManaStatus, score);
+            birdsObject[i].objectCollision(character, blood, 30, mana);
         }
-
+        birdsObject = birdsObject.filter(object => !object.deleteStatus)
         for (let i = 0; i< beesObject.length; i++){
             beesObject[i].raiseSpeed(count);
-            beesObject[i].objectCollision(character, blood, 40, fullManaStatus, score); 
+            beesObject[i].objectCollision(character, blood, 40, mana); 
         }
-
+        beesObject = beesObject.filter(object => !object.deleteStatus)
         for (let i = 0; i< frogsObject.length; i++){
             frogsObject[i].raiseSpeed(count);
             if (frogsObject[i].status){
@@ -371,17 +362,15 @@ function myGame(){
                     && frogsObject[i].y+fixPointCollosion <= character.y + character.height * character.scale
                     && character.jumpPoint - character.speedY == character.y) {
                         blood.lostBlood(0);
-                        if (fullManaStatus){
-                            score++;
-                        }
+                        if (mana.full){character.score++;}
                         mana.w +=15;
                         frogsObject[i].status = false;
                 } else {
-                    frogsObject[i].objectCollision(character, blood, 5, fullManaStatus, score);
+                    frogsObject[i].objectCollision(character, blood, 5, mana);
                 }
             }
         }
-        
+        frogsObject = frogsObject.filter(object => !object.deleteStatus)
         MoveLeftBackground(character.speedX);
         gravitycharacter();
         count++;
@@ -415,11 +404,11 @@ function myGame(){
         if (blood.w <0){
             character.y = character.jumpPoint;
             let highScore = localStorage.getItem('score');
-            if (highScore < score){
-                highScore = localStorage.setItem('score', score);
+            if (highScore < character.score){
+                highScore = localStorage.setItem('score', character.score);
             }
             document.getElementById('highscore').innerHTML = 'High Score: '+ highScore;
-            alert('Game Over! Your score is: '+ score);
+            alert('Game Over! Your score is: '+ character.score);
             gameStatus = false;
             if (window.confirm ('do you want to replay?')){
                 myGame();

@@ -8,6 +8,7 @@ class Blood {
         this.h = h;
         this.blood = 100;
         this.color = color;
+        this.full = false;
     }
 
     drawBlood(){

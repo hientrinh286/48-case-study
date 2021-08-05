@@ -19,6 +19,7 @@ class Character {
         this.frameX_Max = 12;
         this.frameY_Max = 1;
         this.fixPointCollision = 5;
+        this.score = 0;
 
     }
 

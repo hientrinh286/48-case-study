@@ -14,6 +14,7 @@ class Object {
         this.scale = 1;
         this.frameX_Max = 1;
         this.frameY_Max = 1;
+        this.deleteStatus = false;
         this.canvas = document.getElementById('my-canvas');
         this.ctx = this.canvas.getContext('2d');
     }
@@ -24,6 +25,10 @@ class Object {
 
     getMove(){
         this.x -=this.speedX;
+        if (this.x < 0- this.width){
+            this.status = false;
+            this.deleteStatus = true;
+        }
     }
 
     updateMove(){
@@ -33,16 +38,17 @@ class Object {
         }
     }
 
-    objectCollision(character, blood, bloodLost, fullManaStatus, score){
+    objectCollision(character, blood, bloodLost, mana){
         if (this.status){
             if (this.x >= character.x - this.width * this.scale
                 && this.x <= character.x + character.width * character.scale
                 && this.y - character.fixPointCollision >= character.y - this.height * this.scale
                 && this.y + character.fixPointCollision <= character.y + character.height * character.scale) {
                     this.status = false;
-                    if (fullManaStatus){
-                        score++;
+                    if (mana.full){
+                        character.score++;
                     } else {
+                        this.deleteStatus = true;
                         blood.lostBlood(bloodLost);
                     }  
             }
