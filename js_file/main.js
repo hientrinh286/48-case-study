@@ -389,15 +389,13 @@ function myGame(){
     } 
     }
     startAnimate(15);
-
+    var audio1 = new Audio('sound/get.wav');
     function getCoinSound(){
-        var audio = new Audio('sound/get.wav');
-        audio.play();
+        audio1.play();
     }
-
+    var audio2 = new Audio('sound/jumpSound.wav');
     function jumpSound(){
-        var audio = new Audio('sound/jumpSound.wav');
-        audio.play();
+        audio2.play();
     }
 
     function CheckGameOver(){
@@ -416,7 +414,6 @@ function myGame(){
                 canvas.hidden = true;
                 document.getElementById('table-instruction').hidden = false;
             }
-            
         }
     }
 }

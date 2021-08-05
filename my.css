@@ -7,6 +7,7 @@
     top: 0;
     left: 10%;
     background-color: #2492a5;
+    table-layout: fixed;
 }
 
 #table-instruction{
@@ -29,4 +30,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+button {
+    border: 1px solid red;
+    border-radius: 10px;
+    width: 150px;
+    height: 50px;
 }
